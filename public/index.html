@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XML aktarım</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 15px/1.45 "Segoe UI", sans-serif;
+      background: #e7f1f8;
+      color: #24384a;
+    }
+    main { max-width: 880px; margin: 32px auto; padding: 0 16px 40px; }
+    h1 { font-size: 22px; margin: 0 0 4px; font-weight: 600; color: #1d6f9a; display: flex; align-items: center; gap: 8px; }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 7px;
+      background: #1d7aab;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.2px;
+    }
+    .card {
+      background: #f4fbff;
+      border: 1px solid #b9d4e8;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; color: #1d6f9a; }
+    input, select, button {
+      font: inherit;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #9ec3dc;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #24384a;
+    }
+    button {
+      margin-top: 10px;
+      background: #1d7aab;
+      color: #ffffff;
+      border: 0;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    button.ikincil { background: #d7ebf6; color: #1a5f86; }
+    button:disabled { opacity: 0.55; cursor: default; }
+    .ust { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .ust button { margin-top: 0; }
+    .ust-dugme { display: flex; gap: 8px; align-items: center; }
+    .dugmeler { display: flex; gap: 8px; }
+    .dugmeler button { margin-top: 12px; width: auto; }
+    .hata { color: #c44747; min-height: 1.2em; }
+    .bilgi { color: #3d6f8c; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #d3e6f2; font-size: 14px; }
+    th { font-size: 12px; color: #1d6f9a; font-weight: 600; }
+    .satir { display: flex; justify-content: space-between; gap: 12px; }
+    .oturum-kutu { max-width: 360px; margin: 14px auto 0; }
+    .oturum { margin-top: 0; padding-top: 0; overflow: hidden; }
+    .oturum input, .oturum select, .gelismis select { border-radius: 2px; }
+    .serit { height: 7px; margin: 0 -18px 16px; background: linear-gradient(90deg, #1d7aab, #3aa0c8, #5ec4c0, #7eb6e0); }
+    .oturum h2 { margin: 4px 0 16px; text-align: center; font-size: 18px; font-weight: 600; color: #1d6f9a; }
+    .oturum button { width: 100%; padding: 7px 10px; font-size: 14px; }
+    .gizli { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+    .satir-alan { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: center; margin-top: 10px; }
+    .ikon { display: flex; color: #1d7aab; }
+    .gelismis { margin-top: 14px; padding-top: 8px; }
+    .alan { display: grid; grid-template-columns: 108px 1fr; gap: 8px; align-items: center; margin-top: 8px; }
+    .alan span { font-size: 13px; color: #1a5f86; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="ust">
+      <div>
+        <h1><span class="logo">Expert XML</span></h1>
+        <div class="bilgi" id="durum">Oturum bilgileri</div>
+      </div>
+      <div class="ust-dugme">
+        <button class="ikincil" id="cikis" hidden type="button">Çıkış</button>
+      </div>
+    </div>
+
+    <form class="oturum-kutu" id="girisForm">
+      <div class="card oturum">
+      <div class="serit"></div>
+      <h2>Oturum Bilgileri</h2>
+      <label class="gizli" for="kullanici">Kullanıcı</label>
+      <div class="satir-alan">
+        <span class="ikon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.2c1.4-3 3.8-4.4 7-4.4s5.6 1.4 7 4.4"/></svg></span>
+        <select id="kullanici" required></select>
+      </div>
+      <label class="gizli" for="sifre">Şifre</label>
+      <div class="satir-alan">
+        <span class="ikon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="10" width="14" height="9" rx="1.5"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/></svg></span>
+        <input id="sifre" type="password" autocomplete="off">
+      </div>
+      <label class="gizli" for="oturum">Firma</label>
+      <div class="satir-alan">
+        <span class="ikon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3.5 2.1 4.6 5 .6-3.7 3.4.9 5-4.3-2.4-4.3 2.4.9-5L4.9 8.7l5-.6L12 3.5z"/></svg></span>
+        <select id="oturum" required></select>
+      </div>
+      <button type="submit">Tamam</button>
+      <button class="ikincil" id="gelismisBtn" type="button">Gelişmiş...</button>
+      <p class="hata" id="girisHata"></p>
+      </div>
+      <div class="gelismis" id="gelismis">
+        <div class="alan"><span>Firma Kodu</span><select id="firmaKod"></select></div>
+        <div class="alan"><span>Firma Adı</span><select id="firmaAd"></select></div>
+        <div class="alan"><span>Dönem</span><select id="donem"></select></div>
+        <div class="alan"><span>Şube</span><select id="sube"></select></div>
+        <div class="alan"><span>Kasa</span><select id="kasa"></select></div>
+        <div class="alan"><span>Sunucu</span><input id="ayarSunucu" readonly></div>
+        <div class="alan"><span>Veritabanı</span><select id="ayarDb"></select></div>
+        <div class="dugmeler">
+          <button class="ikincil" id="ayarTest" type="button">Bağlantıyı dene</button>
+          <button id="ayarKaydet" type="button">Kaydet</button>
+        </div>
+        <p class="bilgi" id="ayarSonuc"></p>
+      </div>
+    </form>
+
+    <section class="card" id="aktarim" hidden>
+      <label for="dosya">XML dosyası</label>
+      <input id="dosya" type="file" accept=".xml,text/xml" multiple>
+      <p class="bilgi">Seçilen e-müstahsil XML, Aktar ile bu firmanın müstahsil makbuzu olarak işlenir. Stopaj, üretici ve kalemler alış faturasına yazılır.</p>
+      <div id="onizleme"></div>
+      <button id="aktarBtn" type="button" disabled>Aktar</button>
+      <p class="hata" id="aktarHata"></p>
+      <p class="bilgi" id="aktarSonuc"></p>
+    </section>
+  </main>
+  <script>
+    const girisForm = document.getElementById("girisForm");
+    const aktarim = document.getElementById("aktarim");
+    const kullanici = document.getElementById("kullanici");
+    const oturumSec = document.getElementById("oturum");
+    const firmaKod = document.getElementById("firmaKod");
+    const firmaAd = document.getElementById("firmaAd");
+    const donemSec = document.getElementById("donem");
+    const subeSec = document.getElementById("sube");
+    const kasaSec = document.getElementById("kasa");
+    const girisHata = document.getElementById("girisHata");
+    const aktarHata = document.getElementById("aktarHata");
+    const aktarSonuc = document.getElementById("aktarSonuc");
+    const aktarBtn = document.getElementById("aktarBtn");
+    const onizleme = document.getElementById("onizleme");
+    const durum = document.getElementById("durum");
+    const cikis = document.getElementById("cikis");
+    let token = "";
+    let secilenler = [];
+    let kullaniciKayitlari = [];
+    let firmalar = [];
+    let donemler = [];
+    let kasalar = [];
+
+    function secenekDoldur(select, items, value, label) {
+      select.innerHTML = "";
+      for (const item of items) {
+        const option = document.createElement("option");
+        option.value = value(item);
+        option.textContent = label(item);
+        select.appendChild(option);
+      }
+    }
+
+    function firmaNo() {
+      return Number(firmaKod.value || 0);
+    }
+
+    function donemNo() {
+      return Number(donemSec.value || 0);
+    }
+
+    function oturumGuncelle() {
+      const hedef = String(firmaNo());
+      if ([...oturumSec.options].some((item) => item.value === hedef)) oturumSec.value = hedef;
+    }
+
+    function girisHatirla() {
+      try {
+        return JSON.parse(localStorage.getItem("xml-aktarim-giris") || "null");
+      } catch {
+        return null;
+      }
+    }
+
+    function seciliKayit() {
+      const hatira = girisHatirla();
+      if (hatira && hatira.kullanici === kullanici.value) return hatira;
+      return kullaniciKayitlari.find((item) => item.kullanici === kullanici.value) || null;
+    }
+
+    async function donemleriYukle(tercih) {
+      const response = await fetch("/donemler?firma=" + firmaNo());
+      const body = await response.json();
+      donemler = body.items || [];
+      secenekDoldur(donemSec, donemler, (item) => item.no, (item) => String(item.yil));
+      const istenen = String(tercih || "");
+      if (istenen && [...donemSec.options].some((item) => item.value === istenen)) {
+        donemSec.value = istenen;
+        return;
+      }
+      const guncel = [...donemler].reverse().find((item) => Number(item.yil) <= new Date().getFullYear()) || donemler[donemler.length - 1];
+      if (guncel) donemSec.value = guncel.no;
+    }
+
+    function kasalariGoster(tercih) {
+      const liste = kasalar.filter((item) => Number(item.subeNo) === Number(subeSec.value));
+      secenekDoldur(kasaSec, liste, (item) => item.no, (item) => item.ad);
+      if (tercih && [...kasaSec.options].some((item) => item.value === String(tercih.kasaNo))) {
+        kasaSec.value = String(tercih.kasaNo);
+      }
+    }
+
+    async function yerleriYukle() {
+      const [sube, kasa, yer] = await Promise.all([
+        fetch("/subeler?firma=" + firmaNo()).then((response) => response.json()),
+        fetch("/kasalar?firma=" + firmaNo()).then((response) => response.json()),
+        fetch("/yer?kullanici=" + encodeURIComponent(kullanici.value) + "&firma=" + firmaNo()).then((response) => response.json()),
+      ]);
+      kasalar = kasa.items || [];
+      secenekDoldur(subeSec, sube.items || [], (item) => item.no, (item) => item.ad);
+      const tercih = (yer.items || [])[0];
+      if (tercih && [...subeSec.options].some((item) => item.value === String(tercih.subeNo))) {
+        subeSec.value = String(tercih.subeNo);
+      }
+      kasalariGoster(tercih);
+    }
+
+    async function firmaDegisti(donemTercih) {
+      firmaAd.value = firmaKod.value;
+      await donemleriYukle(donemTercih);
+      await yerleriYukle();
+      oturumGuncelle();
+    }
+
+    async function firmaUygula() {
+      const kayit = seciliKayit();
+      const firma = String(kayit?.firma || "");
+      if ([...firmaKod.options].some((item) => item.value === firma)) firmaKod.value = firma;
+      await firmaDegisti(kayit?.donem);
+    }
+
+    async function oturumlariYukle() {
+      const users = await fetch("/kullanicilar").then((response) => response.json());
+      const firmaBody = await fetch("/firmalar").then((response) => response.json());
+      firmalar = firmaBody.items || [];
+      kullaniciKayitlari = users.items || [];
+      secenekDoldur(kullanici, kullaniciKayitlari, (item) => item.kullanici, (item) => item.kullanici);
+      const hatira = girisHatirla();
+      if (hatira && [...kullanici.options].some((item) => item.value === hatira.kullanici)) kullanici.value = hatira.kullanici;
+      else if ([...kullanici.options].some((item) => item.value === "ADMIN")) kullanici.value = "ADMIN";
+      secenekDoldur(firmaKod, firmalar, (item) => item.no, (item) => item.kod);
+      secenekDoldur(firmaAd, firmalar, (item) => item.no, (item) => item.kisaAd || item.kod);
+      secenekDoldur(oturumSec, firmalar, (item) => item.no, (item) => item.kisaAd || item.kod);
+      await firmaUygula();
+    }
+    function para(value) {
+      return Number(value || 0).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function cik() {
+      token = "";
+      girisForm.hidden = false;
+      aktarim.hidden = true;
+      cikis.hidden = true;
+      onizleme.innerHTML = "";
+      secilenler = [];
+      aktarBtn.disabled = true;
+      aktarSonuc.textContent = "";
+      document.getElementById("dosya").value = "";
+      durum.textContent = "Oturum bilgileri";
+    }
+
+    kullanici.addEventListener("change", () => {
+      firmaUygula().catch((error) => {
+        girisHata.textContent = error.message;
+      });
+    });
+    subeSec.addEventListener("change", () => kasalariGoster(null));
+    firmaKod.addEventListener("change", () => {
+      firmaDegisti().catch((error) => {
+        girisHata.textContent = error.message;
+      });
+    });
+    firmaAd.addEventListener("change", () => {
+      firmaKod.value = firmaAd.value;
+      firmaDegisti().catch((error) => {
+        girisHata.textContent = error.message;
+      });
+    });
+    oturumSec.addEventListener("change", async () => {
+      if (firmaKod.value === oturumSec.value) return;
+      firmaKod.value = oturumSec.value;
+      await firmaDegisti();
+    });
+    document.getElementById("gelismisBtn").addEventListener("click", () => {
+      document.getElementById("gelismis").hidden = !document.getElementById("gelismis").hidden;
+    });
+
+    girisForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      girisHata.textContent = "";
+      if (!kullanici.value) {
+        girisHata.textContent = "Kullanıcı seçin.";
+        return;
+      }
+      if (!firmaNo() || !donemNo()) {
+        girisHata.textContent = "Firma ve dönem seçin.";
+        return;
+      }
+      let response;
+      try {
+        response = await fetch("/giris", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            kullanici: kullanici.value,
+            firma: firmaNo(),
+            donem: donemNo(),
+            sube: subeSec.selectedOptions[0]?.textContent || "",
+            kasa: kasaSec.selectedOptions[0]?.textContent || "",
+          }),
+        });
+      } catch (error) {
+        girisHata.textContent = "Giriş servisine ulaşılamadı.";
+        return;
+      }
+      const body = await response.json();
+      if (!response.ok) {
+        girisHata.textContent = body.error || "Giriş yapılamadı.";
+        return;
+      }
+      localStorage.setItem("xml-aktarim-giris", JSON.stringify({
+        kullanici: body.kullanici,
+        firma: body.firma,
+        donem: body.donem,
+      }));
+      token = body.token;
+      girisForm.hidden = true;
+      aktarim.hidden = false;
+      cikis.hidden = false;
+      durum.textContent = body.kullanici + " · " + body.firmaAd + " - " + body.yil;
+      window.scrollTo(0, 0);
+    });
+
+    cikis.addEventListener("click", cik);
+
+    document.getElementById("dosya").addEventListener("change", async (event) => {
+      onizleme.innerHTML = "";
+      aktarHata.textContent = "";
+      aktarSonuc.textContent = "";
+      secilenler = [];
+      aktarBtn.disabled = true;
+      const hazir = [];
+      for (const file of event.target.files) {
+        const xml = await file.text();
+        const kutu = document.createElement("div");
+        kutu.style.marginTop = "14px";
+        onizleme.appendChild(kutu);
+        try {
+          const response = await fetch("/onizle", {
+            method: "POST",
+            headers: { Authorization: "Bearer " + token, "Content-Type": "text/xml" },
+            body: xml,
+          });
+          const body = await response.json();
+          if (!response.ok) throw new Error(body.error || "Önizleme alınamadı.");
+          if (!body.donem || !body.musTablolari) {
+            throw new Error("Bu firmada " + String(body.tarih || "").slice(0, 4) + " müstahsil dönemi yok.");
+          }
+          hazir.push({ ad: file.name, xml, body });
+          kutu.appendChild(ciz(body));
+        } catch (error) {
+          kutu.textContent = file.name + ": " + error.message;
+        }
+      }
+      secilenler = hazir;
+      aktarBtn.disabled = hazir.length === 0;
+      aktarBtn.textContent = hazir.length > 1 ? "Aktar (" + hazir.length + " makbuz)" : "Aktar";
+    });
+
+    aktarBtn.addEventListener("click", async () => {
+      aktarBtn.disabled = true;
+      aktarHata.textContent = "";
+      aktarSonuc.textContent = "";
+      const yazilan = [];
+      for (const dosya of secilenler) {
+        const response = await fetch("/aktar", {
+          method: "POST",
+          headers: { Authorization: "Bearer " + token, "Content-Type": "text/xml" },
+          body: dosya.xml,
+        });
+        const sonuc = await response.json();
+        if (!response.ok) {
+          aktarHata.textContent = dosya.ad + ": " + (sonuc.error || "Aktarılamadı.");
+          aktarBtn.disabled = false;
+          return;
+        }
+        const kart = sonuc.cariYeni ? "cari kartı açıldı" : "mevcut cari kartına bağlandı";
+        const uyari = sonuc.uyari ? sonuc.uyari + " " : "";
+        yazilan.push(uyari + sonuc.belgeNo + " müstahsil olarak işlendi, " + sonuc.uretici + " " + kart);
+      }
+      aktarSonuc.textContent = yazilan.join(" · ");
+      aktarBtn.textContent = "Aktarıldı";
+    });
+
+    function ciz(body) {
+      const wrap = document.createElement("div");
+      const baslik = document.createElement("div");
+      baslik.className = "satir";
+      const sol = document.createElement("strong");
+      sol.textContent = body.belgeNo + " · " + body.tarih;
+      const sag = document.createElement("span");
+      sag.textContent = "Ödenecek " + para(body.odenecek) + " TL";
+      baslik.append(sol, sag);
+      const acik = document.createElement("p");
+      acik.className = "bilgi";
+      const cari = body.cari ? body.cari.kod + " " + body.cari.ad : "üretici kartı açılacak";
+      acik.textContent = "Üretici " + body.uretici + " (" + body.tckn + ") · " + cari
+        + " · dönem " + body.donem.yil + " · stopaj %" + body.stopajOran + " = " + para(body.stopaj) + " TL";
+      const table = document.createElement("table");
+      table.innerHTML = "<thead><tr><th>Ürün</th><th>Miktar</th><th>Fiyat</th><th>Tutar</th><th>Künye</th></tr></thead>";
+      const tbody = document.createElement("tbody");
+      for (const kalem of body.kalemler) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = "<td></td><td></td><td></td><td></td><td></td>";
+        const cells = tr.children;
+        cells[0].textContent = kalem.ad;
+        cells[1].textContent = para(kalem.miktar) + " " + kalem.birim;
+        cells[2].textContent = para(kalem.fiyat);
+        cells[3].textContent = para(kalem.tutar);
+        cells[4].textContent = kalem.kunye || "";
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      wrap.append(baslik);
+      if (body.uyari) {
+        const uyari = document.createElement("p");
+        uyari.className = "hata";
+        uyari.textContent = body.uyari;
+        wrap.appendChild(uyari);
+      }
+      wrap.append(acik, table);
+      return wrap;
+    }
+
+    const ayarSonuc = document.getElementById("ayarSonuc");
+    const ayarDb = document.getElementById("ayarDb");
+
+    async function ayarlariYukle() {
+      ayarSonuc.textContent = "";
+      ayarSonuc.className = "bilgi";
+      const ayar = await fetch("/ayar").then((response) => response.json());
+      document.getElementById("ayarSunucu").value = ayar.sunucu || "";
+      const liste = await fetch("/veritabanlari").then((response) => response.json());
+      ayarDb.innerHTML = "";
+      for (const item of liste.items || []) {
+        const option = document.createElement("option");
+        option.value = item.ad;
+        option.textContent = item.ad;
+        ayarDb.appendChild(option);
+      }
+      if ([...ayarDb.options].some((item) => item.value === ayar.veritabani)) ayarDb.value = ayar.veritabani;
+    }
+
+    document.getElementById("ayarTest").addEventListener("click", async () => {
+      ayarSonuc.className = "bilgi";
+      ayarSonuc.textContent = "Deneniyor...";
+      try {
+        const response = await fetch("/baglanti", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ veritabani: ayarDb.value }),
+        });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.error || "Bağlantı kurulamadı.");
+        ayarSonuc.className = body.vega ? "bilgi" : "hata";
+        ayarSonuc.textContent = body.vega
+          ? "Bağlantı tamam. " + body.veritabani + " · " + body.sunucu
+          : "Bağlandı ama bu veritabanında Vega firma tablosu yok.";
+      } catch (error) {
+        ayarSonuc.className = "hata";
+        ayarSonuc.textContent = error.message;
+      }
+    });
+
+    document.getElementById("ayarKaydet").addEventListener("click", async () => {
+      ayarSonuc.className = "bilgi";
+      ayarSonuc.textContent = "Kaydediliyor...";
+      try {
+        const response = await fetch("/ayar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ veritabani: ayarDb.value }),
+        });
+        const body = await response.json();
+        if (!response.ok) throw new Error(body.error || "Kaydedilemedi.");
+        ayarSonuc.className = "bilgi";
+        ayarSonuc.textContent = "Kaydedildi. " + body.veritabani + " kullanılacak.";
+        cik();
+        await oturumlariYukle();
+      } catch (error) {
+        ayarSonuc.className = "hata";
+        ayarSonuc.textContent = error.message;
+      }
+    });
+
+    oturumlariYukle().catch((error) => {
+      girisHata.textContent = error.message;
+    });
+    ayarlariYukle().catch((error) => {
+      ayarSonuc.className = "hata";
+      ayarSonuc.textContent = error.message;
+    });
+  </script>
+</body>
+</html>

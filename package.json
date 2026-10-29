@@ -1,0 +1,62 @@
+{
+  "name": "xml-aktarim",
+  "productName": "XML Aktarım",
+  "description": "e-Müstahsil XML aktarım",
+  "version": "1.0.0",
+  "author": {
+    "name": "Expert Bilişim"
+  },
+  "private": true,
+  "type": "module",
+  "main": "main.mjs",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server.mjs",
+    "setup": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2",
+    "fast-xml-parser": "^5.3.0"
+  },
+  "devDependencies": {
+    "electron": "^35.7.5",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.expertbilisim.xmlaktarim",
+    "productName": "XML Aktarım",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.mjs",
+      "server.mjs",
+      "lib/**/*",
+      "public/**/*",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "asar": true,
+    "publish": {
+      "provider": "github",
+      "owner": "expertbilisim",
+      "repo": "xml-aktarim"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": "nsis",
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "XML Aktarım",
+      "installerLanguages": ["tr_TR"],
+      "language": "1055",
+      "artifactName": "XML-Aktarim-Kurulum.${ext}"
+    }
+  }
+}
